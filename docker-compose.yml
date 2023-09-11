@@ -1,0 +1,32 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    container_name: "db"
+    restart: always
+    environment:
+      - POSTGRES_USER=wp_lab
+      - POSTGRES_PASSWORD=lab3
+      - POSTGRES_DB=balloon-shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  app:
+    image: vuevska/devops-project:latest
+    container_name: "app"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/balloon-shop
+      - SPRING_DATASOURCE_USERNAME=wp_lab
+      - SPRING_DATASOURCE_PASSWORD=lab3
+
+volumes:
+  postgres-data:
