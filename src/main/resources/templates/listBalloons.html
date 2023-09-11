@@ -1,0 +1,126 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Balloon Order page - Welcome and choose a Balloon</title>
+    <link href="/static/listBalloons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css"
+          integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+
+        h2 {
+            width: 250px;
+            margin: auto;
+        }
+
+        #div-submit {
+            width: 65px;
+            margin: 20px auto auto;
+        }
+
+        .edit-balloon {
+            text-decoration: none;
+            background-color: #92d8de;
+            border-radius: 8px;
+            border-width: 0;
+            color: #333333;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .delete-balloon {
+            text-decoration: none;
+            background-color: #e94945;
+            border-radius: 8px;
+            border-width: 0;
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 10px 12px;
+            text-align: center;
+            transition: all 200ms;
+            vertical-align: baseline;
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+    </style>
+</head>
+<body>
+<div class="container col-6 mx-auto mt-5">
+    <header>
+        <h1 class="text-center">Welcome to our Balloon Shop App</h1>
+    </header>
+    <main>
+        <h2 class="text-center">Choose balloon type:</h2>
+        <table class="table table-striped pure-table mt-4 text-center">
+            <thead>
+            <tr>
+                <th scope="col" style="text-align: center">Name</th>
+                <th scope="col" style="text-align: center">Description</th>
+                <th scope="col" style="text-align: center">Manufacturer</th>
+                <th:block>
+                    <th scope="col" colspan="2" style="text-align: center">Modify</th>
+                </th:block>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="balloon :${balloons}" class="balloons">
+                <td th:text="${balloon.getName()}"></td>
+                <td th:text="${balloon.getDescription()}"></td>
+                <td th:text="${balloon.getManufacturer().getName()}"></td>
+                <td th:class="text-right">
+                    <a th:href="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}"
+                       class="btn btn-info edit-balloon">
+                        <span>Edit</span>
+                    </a>
+                </td>
+                <td>
+                    <form th:method="delete" th:action="@{'/balloons/delete/' + ${balloon.getId()}}">
+                        <input type="hidden" th:name="_csrf"/>
+                        <button type="submit" class="btn btn-danger delete-balloon">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <th:block>
+            <div id="add-new" class="mt-5 mx-auto text-center">
+                <a href="/balloons/add-form" class="btn add-balloon"
+                   style="text-decoration: underline; color: blue">Add new balloon</a>
+                <br>
+                <a href="/manufacturers/add-man" class="btn"
+                   style="text-decoration: underline; color: blue">Add new manufacturer</a>
+            </div>
+        </th:block>
+        <div th:if="${hasError}" th:class="error">
+            <div th:text="${error}"></div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
