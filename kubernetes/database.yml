@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devops-project-postgres-config
+  namespace: devops-ns
+data:
+  POSTGRES_DB: 'balloon-shop'
+  POSTGRES_USER: 'wp_lab'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: devops-project-postgres-secret
+  namespace: devops-ns
+type: Opaque
+data:
+  POSTGRES_USER: d3M0Us3r
+  POSTGRES_PASSWORD: bGFiMw==
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devops-project-postgres-pvc
+  namespace: devops-ns
+  labels:
+    app: postgres
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: devops-project-postgres-statefulset
+  namespace: devops-ns
+spec:
+  serviceName: devops-project-postgres-service
+  selector:
+    matchLabels:
+      app: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+        namespace: devops-ns
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-project-postgres-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-project-postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: devops-project-postgres-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: devops-project-postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: devops-project-postgres-data
+          persistentVolumeClaim:
+            claimName: devops-project-postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-project-postgres-service
+  namespace: devops-ns
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+  type: LoadBalancer
