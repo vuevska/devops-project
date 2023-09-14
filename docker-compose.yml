@@ -4,10 +4,12 @@ services:
     image: postgres:latest
     container_name: "db"
     restart: always
-    environment:
-      - POSTGRES_USER=wp_lab
-      - POSTGRES_PASSWORD=lab3
-      - POSTGRES_DB=balloon-shop
+    env_file:
+      - .env
+#    environment:
+#      - POSTGRES_USER=wp_lab
+#      - POSTGRES_PASSWORD=lab3
+#      - POSTGRES_DB=balloon-shop
     ports:
       - "5432:5432"
     volumes:
@@ -23,10 +25,12 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/balloon-shop
-      - SPRING_DATASOURCE_USERNAME=wp_lab
-      - SPRING_DATASOURCE_PASSWORD=lab3
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://balloon-store-db.postgres.database.azure.com:5432/balloon-shop
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
 
 volumes:
   postgres-data:

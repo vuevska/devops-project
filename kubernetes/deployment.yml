@@ -4,7 +4,8 @@ metadata:
   name: devops-project-config
   namespace: devops-ns
 data:
-  SPRING_DATASOURCE_URL: 'jdbc:postgresql://db:5432/balloon-shop'
+  SPRING_DATASOURCE_URL: 'jdbc:postgresql://balloon-store-db.postgres.database.azure.com:5432/balloon-shop'
+  #SPRING_DATASOURCE_URL: 'jdbc:postgresql://db:5432/balloon-shop'
   POSTGRES_USERNAME: 'wp_lab'
 ---
 apiVersion: v1
@@ -14,7 +15,8 @@ metadata:
   namespace: devops-ns
 type: Opaque
 data:
-  SPRING_DATASOURCE_PASSWORD: bGFiMw==
+  #SPRING_DATASOURCE_PASSWORD: bGFiMw==
+  SPRING_DATASOURCE_PASSWORD: RGV2b3BzI3Byb2plY3QjY2ljZDMj
 ---
 apiVersion: apps/v1
 kind: Deployment
