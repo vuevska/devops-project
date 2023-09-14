@@ -34,7 +34,7 @@ jobs:
         with:
           azure-subscription: ${{ env.AZURE_SUBSCRIPTION }}
           action: Deploy
-          service-name: spring-app
+          service-name: balloon-spring-apps
           app-name: spring-app
           use-staging-deployment: false
           package: ${{ env.ASC_PACKAGE_PATH }}/**/*.jar
