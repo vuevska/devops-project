@@ -7,6 +7,7 @@ data:
   SPRING_DATASOURCE_URL: 'jdbc:postgresql://balloon-store-db.postgres.database.azure.com:5432/balloon-shop'
   #SPRING_DATASOURCE_URL: 'jdbc:postgresql://db:5432/balloon-shop'
   POSTGRES_USERNAME: 'wp_lab'
+  SPRING_DATASOURCE_USERNAME: 'wp_lab'
 ---
 apiVersion: v1
 kind: Secret
@@ -49,7 +50,7 @@ spec:
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
-                  name: devops-project-app-config
+                  name: devops-project-config
                   key: SPRING_DATASOURCE_URL
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
